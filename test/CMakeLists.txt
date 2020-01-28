@@ -14,5 +14,5 @@ set(SOURCES
 )
 
 add_executable(DataSeriesTest ${SOURCES} ${HEADERS})
-target_link_libraries(DataSeriesTest ${GTEST_LIBRARIES} DataSeries)
+target_link_libraries(DataSeriesTest ${GTEST_LIBRARIES} DataSeries pthread)
 gtest_add_tests(TARGET DataSeriesTest TEST_SUFFIX .noArgs TEST_LIST noArgsTests)
