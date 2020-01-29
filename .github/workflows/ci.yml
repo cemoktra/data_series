@@ -22,4 +22,4 @@ jobs:
     - name: configure
       run: mkdir build && cd build && cmake -DCMAKE_PREFIX_PATH=/usr/lib/cmake ..
     - name: build
-      run: cmake --build build
+      run: sudo cmake --build build
