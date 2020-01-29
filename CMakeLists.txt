@@ -9,8 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 enable_testing()
 include(GoogleTest)
 
-list(APPEND CMAKE_MODULE_PATH "/usr/lib/cmake")
-message("TEST: ${CMAKE_MODULE_PATH}")
+message("CMAKE_SYSTEM_PREFIX_PATH: ${CMAKE_SYSTEM_PREFIX_PATH}")
 
 find_package(GTest REQUIRED)
 find_package(nlohmann_json REQUIRED)
