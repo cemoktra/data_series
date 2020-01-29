@@ -9,6 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 enable_testing()
 include(GoogleTest)
 
+message("TEST: ${CMAKE_MODULE_PATH}")
+
 find_package(GTest REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(OpenSSL REQUIRED)
