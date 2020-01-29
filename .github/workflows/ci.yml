@@ -18,8 +18,8 @@ jobs:
     - name: install packages
       run: sudo apt-get install libopenblas-dev liblapack-dev libtbb-dev libgtest-dev nlohmann-json-dev
     - name: cmake gtest
-      run: sudo cmake -DCMAKE_PREFIX_PATH=/usr/lib/cmake /usr/src/gtest/CMakeLists.txt && sudo make -C /usr/src/gtest && sudo cp /usr/src/gtest/*.a /usr/lib
+      run: sudo cmake /usr/src/gtest/CMakeLists.txt && sudo make -C /usr/src/gtest && sudo cp /usr/src/gtest/*.a /usr/lib
     - name: configure
-      run: mkdir build && cd build && cmake ..
+      run: mkdir build && cd build && cmake -DCMAKE_PREFIX_PATH=/usr/lib/cmake ..
     - name: build
       run: cmake --build build
