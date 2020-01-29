@@ -17,6 +17,8 @@ jobs:
         submodules: true
     - name: install packages
       run: sudo apt-get install libopenblas-dev liblapack-dev libtbb-dev libgtest-dev nlohmann-json-dev
+    - name: check lohmann json
+      run: ls /usr/lib/cmake
     - name: cmake gtest
       run: sudo cmake /usr/src/gtest/CMakeLists.txt && sudo make -C /usr/src/gtest && sudo cp /usr/src/gtest/*.a /usr/lib
     - name: configure
