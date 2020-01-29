@@ -10,6 +10,7 @@ enable_testing()
 include(GoogleTest)
 
 message("CMAKE_SYSTEM_PREFIX_PATH: ${CMAKE_SYSTEM_PREFIX_PATH}")
+message("CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
 
 find_package(GTest REQUIRED)
 find_package(nlohmann_json REQUIRED)
