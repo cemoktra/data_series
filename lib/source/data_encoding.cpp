@@ -88,7 +88,9 @@ std::vector<double> data_encoding::decode_msgpack(const std::string& encoded_dat
     std::vector<double> decoded;
     auto decompressed = data_encoding::decompress(encoded_datas);
     auto json = nlohmann::json::from_msgpack(decompressed);
-    std::copy(json.begin(), json.end(), std::back_inserter(decoded));
+
+    for (auto value : json)
+        decoded.push_back(value);
     return decoded;
 }
 
