@@ -9,13 +9,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 enable_testing()
 include(GoogleTest)
 
-message("CMAKE_SYSTEM_PREFIX_PATH: ${CMAKE_SYSTEM_PREFIX_PATH}")
-message("CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
-
 find_package(GTest REQUIRED)
-find_package(nlohmann_json REQUIRED)
+find_package(nlohmann_json 3.7.3)
 find_package(OpenSSL REQUIRED)
 find_package(ZLIB REQUIRED)
+
+if (NOT ${nlohmann_json_FOUND})
+    include(ExternalProject)
+    ExternalProject_Add(nlohmann_json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        GIT_TAG v3.7.3
+    )
+endif()
 
 add_subdirectory(submodules/xtl EXCLUDE_FROM_ALL )
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR}/submodules/xtl")
