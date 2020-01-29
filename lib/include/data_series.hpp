@@ -3,6 +3,7 @@
 
 #include "data_series_properties.hpp"
 #include "data_series_iterator.hpp"
+#include "data_encoding.hpp"
 
 #include <stdint.h>
 #include <memory>
@@ -30,8 +31,16 @@ namespace ds {
 
         virtual double operator()(double x) const = 0;
 
+        virtual nlohmann::json to_json(data_encoding::encoding_type_t type) const {
+            return nlohmann::json{{JSON_DATAS_ID, id()}, {JSON_DATAS_TYPE, m_type}, {JSON_DATAS_PROPERTIES, properties().to_json()}};
+        }
+
         data_series_iterator begin() { return data_series_iterator(0, this); }
         data_series_iterator end() { return data_series_iterator(m_properties.samples(), this); }
+
+        bool operator==(const data_series& rhs) const {
+            return m_type == rhs.m_type && m_id == rhs.m_id && m_properties == rhs.m_properties;
+        }
 
     protected:
         data_series(uint64_t id, const data_series_properties& props, data_type_t type)

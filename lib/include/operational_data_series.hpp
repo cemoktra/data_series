@@ -26,6 +26,10 @@ public:
     inline operation_type_t operation_type() const { return m_type; }
     inline std::vector<uint64_t> source_ids() const { std::vector<uint64_t> ids; for (auto source : m_sources) ids.push_back(source->id()); return ids; }
     
+    nlohmann::json to_json(data_encoding::encoding_type_t type) const override;
+
+    bool operator==(const operational_data_series& rhs) const;
+
 protected:
     std::vector<std::shared_ptr<data_series>> m_sources;
 

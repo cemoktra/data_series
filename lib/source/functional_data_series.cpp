@@ -15,9 +15,21 @@ functional_data_series::functional_data_series(function_type_t func_type, uint64
 {
 }
 
+nlohmann::json functional_data_series::to_json(data_encoding::encoding_type_t type) const {
+    auto j = data_series::to_json(type);
+    j[JSON_FUNC_DATAS_TYPE] = function_type();
+    j[JSON_FUNC_DATAS_SOURCE] = source_id();
+    return j;
+}
+
 double functional_data_series::operator()(double x) const
 {
     return m_source ? (*m_source)(x) : x;    
+}
+
+bool functional_data_series::operator==(const functional_data_series& rhs) const
+{
+    return data_series::operator==(rhs) && m_type == rhs.m_type && m_source == rhs.m_source;
 }
 
 // sinus class

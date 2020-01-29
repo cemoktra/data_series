@@ -35,6 +35,10 @@ public:
 
     virtual double operator()(double x) const override;
 
+    nlohmann::json to_json(data_encoding::encoding_type_t type) const override;
+
+    bool operator==(const functional_data_series& rhs) const;
+
 private:
 std::shared_ptr<data_series> m_source;
     function_type_t m_type;    

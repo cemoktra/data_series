@@ -10,6 +10,9 @@ enable_testing()
 include(GoogleTest)
 
 find_package(GTest REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(ZLIB REQUIRED)
 
 add_subdirectory(submodules/xtl EXCLUDE_FROM_ALL )
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR}/submodules/xtl")
