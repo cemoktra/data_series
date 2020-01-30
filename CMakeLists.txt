@@ -20,6 +20,7 @@ if (NOT ${nlohmann_json_FOUND})
         GIT_REPOSITORY https://github.com/nlohmann/json.git
         GIT_TAG v3.7.3
     )
+    set_target_properties(nlohmann_json PROPERTIES EXCLUDE_FROM_ALL TRUE)
 endif()
 
 add_subdirectory(submodules/xtl EXCLUDE_FROM_ALL )

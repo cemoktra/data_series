@@ -104,7 +104,8 @@ std::shared_ptr<data_series> data_collection::create_polynom(const data_series_p
         auto const_fun = create_static_series(props, [i, polynom](double x) { return polynom[i - 1]; });
         if (degree) {
             auto degree_const_fun = create_static_series(props, [i, degree](double x) { return degree; });
-            auto pow_fun = create_functional_data_series(functional_data_series::pow_function, props, degree_const_fun);
+            auto ident_fun = create_functional_data_series(functional_data_series::ident_function, props, nullptr);
+            auto pow_fun = create_operational_data_series(operational_data_series::pow_operation, {ident_fun, degree_const_fun});
             auto mul_fun = create_operational_data_series(operational_data_series::mul_operation, {const_fun, pow_fun});
             polynom_series.push_back(mul_fun);
         } else
@@ -116,58 +117,12 @@ std::shared_ptr<data_series> data_collection::create_polynom(const data_series_p
 
 std::shared_ptr<data_series> data_collection::create_functional_data_series(functional_data_series::function_type_t type, const data_series_properties& props, std::shared_ptr<data_series> source)
 {
-    data_series *raw_ptr = nullptr;
-
-    switch (type) {
-        case functional_data_series::sin_function:
-            raw_ptr = new sin_data_series(m_next_id++, props, source); break;
-        case functional_data_series::cos_function:
-            raw_ptr = new cos_data_series(m_next_id++, props, source); break;
-        case functional_data_series::tan_function:
-            raw_ptr = new tan_data_series(m_next_id++, props, source); break;
-        case functional_data_series::asin_function:
-            raw_ptr = new asin_data_series(m_next_id++, props, source); break;
-        case functional_data_series::acos_function:
-            raw_ptr = new acos_data_series(m_next_id++, props, source); break;
-        case functional_data_series::atan_function:
-            raw_ptr = new atan_data_series(m_next_id++, props, source); break;
-        case functional_data_series::square_function:
-            raw_ptr = new square_data_series(m_next_id++, props, source); break;
-        case functional_data_series::square_root_function:
-            raw_ptr = new square_root_data_series(m_next_id++, props, source); break;
-        case functional_data_series::abs_function:
-            raw_ptr = new abs_data_series(m_next_id++, props, source); break;
-        case functional_data_series::negate_function:
-            raw_ptr = new negate_data_series(m_next_id++, props, source); break;
-        case functional_data_series::pow_function:
-            raw_ptr = new pow_data_series(m_next_id++, props, source); break;            
-        default:
-            break;
-    }
-    return add_raw_pointer(raw_ptr);
+    return add_raw_pointer(new functional_data_series(type, m_next_id++, props, source));
 }
 
 std::shared_ptr<data_series> data_collection::create_operational_data_series(operational_data_series::operation_type_t type, std::vector<std::shared_ptr<data_series>> sources)
 {
-    data_series *raw_ptr = nullptr;
-
-    switch (type) {
-        case operational_data_series::add_operation:
-            raw_ptr = new add_operation_series(m_next_id++, sources); break;
-        case operational_data_series::sub_operation:
-            raw_ptr = new sub_operation_series(m_next_id++, sources); break;
-        case operational_data_series::mul_operation:
-            raw_ptr = new mul_operation_series(m_next_id++, sources); break;
-        case operational_data_series::div_operation:
-            raw_ptr = new div_operation_series(m_next_id++, sources); break;
-        case operational_data_series::max_operation:
-            raw_ptr = new max_operation_series(m_next_id++, sources); break;
-        case operational_data_series::min_operation:
-            raw_ptr = new min_operation_series(m_next_id++, sources); break;
-        default:
-            break;
-    }
-    return add_raw_pointer(raw_ptr);
+    return add_raw_pointer(new operational_data_series(type, m_next_id++, sources));
 }
 
 std::shared_ptr<data_series> data_collection::data_series_by_id(uint64_t id)

@@ -17,6 +17,7 @@ public:
         div_operation,
         max_operation,
         min_operation,
+        pow_operation,
     };
 
     operational_data_series(operation_type_t func_type, uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
@@ -28,73 +29,15 @@ public:
     
     nlohmann::json to_json(data_encoding::encoding_type_t type) const override;
 
+    double operator()(double x) const override;
+
     bool operator==(const operational_data_series& rhs) const;
 
-protected:
-    std::vector<std::shared_ptr<data_series>> m_sources;
-
 private:
+    std::vector<std::shared_ptr<data_series>> m_sources;
+    std::function<double(double)> m_function;
     operation_type_t m_type;    
 };
-
-class add_operation_series : public operational_data_series {
-public:
-    add_operation_series(uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
-    add_operation_series(const add_operation_series&) = delete;
-    ~add_operation_series() = default;
-
-    double operator()(double x) const override;
-};
-
-class sub_operation_series : public operational_data_series {
-public:
-    sub_operation_series(uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
-    sub_operation_series(const sub_operation_series&) = delete;
-    ~sub_operation_series() = default;
-
-    double operator()(double x) const override;
-};
-
-
-class mul_operation_series : public operational_data_series {
-public:
-    mul_operation_series(uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
-    mul_operation_series(const mul_operation_series&) = delete;
-    ~mul_operation_series() = default;
-
-    double operator()(double x) const override;
-};
-
-
-class div_operation_series : public operational_data_series {
-public:
-    div_operation_series(uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
-    div_operation_series(const div_operation_series&) = delete;
-    ~div_operation_series() = default;
-
-    double operator()(double x) const override;
-};
-
-
-class min_operation_series : public operational_data_series {
-public:
-    min_operation_series(uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
-    min_operation_series(const min_operation_series&) = delete;
-    ~min_operation_series() = default;
-
-    double operator()(double x) const override;
-};
-
-
-class max_operation_series : public operational_data_series {
-public:
-    max_operation_series(uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
-    max_operation_series(const max_operation_series&) = delete;
-    ~max_operation_series() = default;
-
-    double operator()(double x) const override;
-};
-
 
 }
 
