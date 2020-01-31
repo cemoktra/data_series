@@ -53,7 +53,7 @@ public:
     inline uint64_t samples() const   { return m_samples; }
     inline double   frequency() const { return m_frequency; }
     inline double   start() const     { return m_start; }
-    inline double   end() const       { return sampleToTime(m_samples - 1); }
+    inline double   end() const       { return m_samples == 0 ? std::numeric_limits<double>::quiet_NaN() : sampleToTime(m_samples - 1); }
 
     inline double   sampleToTime(uint64_t sample) const { return m_start + (sample / m_frequency); }
     inline uint64_t timeToSample(double time) const     { return round((time - m_start) * m_frequency); }
@@ -61,6 +61,8 @@ public:
     virtual nlohmann::json to_json() const {
         return nlohmann::json{{JSON_PROP_SAMPLES, samples()}, {JSON_PROP_FREQUENCY, frequency()}, {JSON_PROP_START, start()}};
     }
+
+    void add_samples(size_t samples) { m_samples += samples; }
 
 private:
     uint64_t m_samples;

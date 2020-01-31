@@ -1,5 +1,6 @@
 #include "data_collection.hpp"
 #include "static_data_series.hpp"
+#include "mutable_data_series.hpp"
 #include <iomanip>
 #include <fstream>
 
@@ -34,6 +35,9 @@ std::shared_ptr<data_collection> data_collection::from_json(nlohmann::json json)
         switch (type) {
             case data_series::static_data:
                 collection->add_raw_pointer(new static_data_series(m_next_id++, json_data));
+                break;
+            case data_series::mutable_data:
+                collection->add_raw_pointer(new mutable_data_series(m_next_id++, json_data));
                 break;
             case data_series::function_data:
                 collection->functional_data_from_json(json_data);
@@ -92,6 +96,11 @@ std::shared_ptr<data_series> data_collection::create_static_series(std::initiali
 std::shared_ptr<data_series> data_collection::create_static_series(const std::vector<double>& vector, double frequency, double start)
 {
     return add_raw_pointer(new static_data_series(m_next_id++, vector, frequency, start));
+}
+
+std::shared_ptr<mutable_data_series> data_collection::create_mutable_data_series(double frequency, double start)
+{
+    return std::dynamic_pointer_cast<mutable_data_series>(add_raw_pointer(new mutable_data_series(m_next_id++, frequency, start)));
 }
 
 std::shared_ptr<data_series> data_collection::create_polynom(const data_series_properties& props, const std::vector<double>& polynom)
