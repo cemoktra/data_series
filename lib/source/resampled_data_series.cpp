@@ -1,6 +1,7 @@
 #include "resampled_data_series.hpp"
 #include <xtensor/xarray.hpp>
 #include <xtensor-blas/xlinalg.hpp>
+#include <boost/math/interpolators/cubic_b_spline.hpp>
 
 namespace ds {
 
@@ -142,8 +143,16 @@ void resampled_data_series::downsample()
 
 void resampled_data_series::upsample()
 {
-    // TODO:
-    throw std::exception();
+    // boost cubic spline
+    std::vector<double> y;
+    std::copy(m_source->begin(), m_source->end(), std::back_inserter(y));
+
+    for (auto x : y)
+        auto z = x;
+
+    boost::math::cubic_b_spline spline(y.data(), y.size(), m_source->min(), m_source->step());
+    for (auto i = 0; i < properties().samples(); i++)
+        m_data[i] = spline(properties().sampleToTime(i));
 }
 
 bool resampled_data_series::recalculate()

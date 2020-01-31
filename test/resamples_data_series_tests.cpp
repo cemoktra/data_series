@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <resampled_data_series.hpp>
+#include <functional_data_series.hpp>
 
 class resampled_data_series_test : public ::testing::Test {
 public:
@@ -36,6 +37,15 @@ public:
         {
         }
     };
+
+    class derived_functional_data_series : public ds::functional_data_series
+    {
+    public:
+        derived_functional_data_series(function_type_t func_type, const ds::data_series_properties& props)
+            : ds::functional_data_series(func_type, 0, props, nullptr)
+        {
+        }
+    };
 };
 
 TEST_F(resampled_data_series_test, downsample_recalculate_when_iterating)
@@ -63,4 +73,34 @@ TEST_F(resampled_data_series_test, downsample_async_recalculate_only_once)
     EXPECT_EQ(0.0, resampled(0.0));
     EXPECT_EQ(0.0, resampled(1.0));
     EXPECT_EQ(5, resampled.properties().samples());
+}
+
+TEST_F(resampled_data_series_test, downsample_sinus)
+{
+    std::shared_ptr<ds::data_series> sinus(new derived_functional_data_series(ds::functional_data_series::sin_function, ds::data_series_properties(100.0, 0.0, 3.0)));
+    derived_resampled_data_series resampled(10.0, sinus);
+
+    resampled.recalculate();
+
+    for (auto i = 0; i < resampled.properties().samples(); i++) {
+        auto time = resampled.properties().sampleToTime(i);
+        auto value = resampled(time);
+        auto real_value = sin(time);
+        EXPECT_NEAR(value, real_value, 0.02);
+    }
+}
+
+TEST_F(resampled_data_series_test, upsample_sinus)
+{
+    std::shared_ptr<ds::data_series> sinus(new derived_functional_data_series(ds::functional_data_series::sin_function, ds::data_series_properties(10.0, 0.0, 3.0)));
+    derived_resampled_data_series resampled(100.0, sinus);
+
+    resampled.recalculate();
+
+    for (auto i = 0; i < resampled.properties().samples(); i++) {
+        auto time = resampled.properties().sampleToTime(i);
+        auto value = resampled(time);
+        auto real_value = sin(time);
+        EXPECT_NEAR(value, real_value, 0.02);
+    }
 }
