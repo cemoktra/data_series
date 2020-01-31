@@ -13,6 +13,7 @@ find_package(GTest REQUIRED)
 find_package(nlohmann_json 3.7.3)
 find_package(OpenSSL REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(boost REQUIRED)
 
 if (NOT ${nlohmann_json_FOUND})
     include(ExternalProject)

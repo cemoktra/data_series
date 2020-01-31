@@ -37,4 +37,4 @@ target_include_directories(DataSeries INTERFACE
     $<BUILD_INTERFACE:${DATASERIERS_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:include>)
 
-target_link_libraries(DataSeries xtl xtensor xtensor-blas lapack openblas OpenSSL::Crypto ZLIB::ZLIB)
+target_link_libraries(DataSeries xtl xtensor xtensor-blas lapack openblas OpenSSL::Crypto ZLIB::ZLIB Boost::boost)

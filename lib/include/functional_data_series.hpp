@@ -43,7 +43,7 @@ public:
 
     bool operator==(const functional_data_series& rhs) const;
 
-private:
+protected:
     functional_data_series(function_type_t func_type, uint64_t id, const data_series_properties& props, std::shared_ptr<data_series> source = nullptr);
 
     std::function<double(double)> m_function;

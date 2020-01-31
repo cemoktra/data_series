@@ -56,7 +56,7 @@ functional_data_series::functional_data_series(function_type_t func_type, uint64
 
 size_t functional_data_series::hash() const
 {
-    return m_source->hash();
+    return m_source ? m_source->hash() : std::hash<int>()(static_cast<int>(m_type + 1));
 }
 
 data_series::data_type_t functional_data_series::type() const
