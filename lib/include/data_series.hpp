@@ -16,6 +16,7 @@ namespace ds {
             static_data,
             function_data,
             operational_data,
+            mutable_data,
         };
 
         ~data_series() = default;
@@ -49,8 +50,9 @@ namespace ds {
             , m_type(type)
         {}
 
-    private:
         data_series_properties m_properties;
+
+    private:
         uint64_t m_id;
         data_type_t m_type;
     };

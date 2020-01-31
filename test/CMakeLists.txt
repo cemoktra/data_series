@@ -11,6 +11,7 @@ set(SOURCES
     functional_data_series_tests.cpp
     operational_data_series_tests.cpp
     static_data_series_tests.cpp
+    mutable_data_series_tests.cpp
 )
 
 add_executable(DataSeriesTest ${SOURCES} ${HEADERS})
