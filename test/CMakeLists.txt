@@ -12,7 +12,7 @@ set(SOURCES
     operational_data_series_tests.cpp
     static_data_series_tests.cpp
     mutable_data_series_tests.cpp
-    resamples_data_series_tests.cpp
+    resampled_data_series_tests.cpp
 )
 
 add_executable(DataSeriesTest ${SOURCES} ${HEADERS})
