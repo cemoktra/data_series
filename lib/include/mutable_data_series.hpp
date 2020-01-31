@@ -14,11 +14,14 @@ public:
     mutable_data_series(const mutable_data_series&) = delete;
     ~mutable_data_series() = default;
 
+    data_series::data_type_t type() const override;
+
     void push_back(double value);
     void push_back(std::vector<double> values);
 
 protected:
     mutable_data_series(uint64_t id, double frequency, double start = 0.0);
+    mutable_data_series(uint64_t id, nlohmann::json json);
 };
 
 }

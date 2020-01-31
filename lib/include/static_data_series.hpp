@@ -19,8 +19,8 @@ namespace ds {
         static_data_series(const static_data_series&) = delete;
         ~static_data_series() = default;
 
+        virtual data_series::data_type_t type() const override;
         double operator()(double x) const override;
-
         virtual nlohmann::json to_json(data_encoding::encoding_type_t type) const;
 
         bool operator==(const static_data_series& rhs) const;

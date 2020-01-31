@@ -34,8 +34,8 @@ public:
     inline function_type_t function_type() const { return m_type; }
     inline uint64_t source_id() const { return m_source ? m_source->id() : 0; }
 
-    virtual double operator()(double x) const override;
-
+    virtual data_series::data_type_t type() const override;
+    double operator()(double x) const override;
     nlohmann::json to_json(data_encoding::encoding_type_t type) const override;
 
     bool operator==(const functional_data_series& rhs) const;

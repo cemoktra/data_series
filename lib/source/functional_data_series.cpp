@@ -6,7 +6,7 @@ namespace ds {
 
 
 functional_data_series::functional_data_series(function_type_t func_type, uint64_t id, const data_series_properties& props, std::shared_ptr<data_series> source)
-    : data_series(id, props, data_type_t::function_data)
+    : data_series(id, props)
     , m_type(func_type)
     , m_source(source)
 {
@@ -54,11 +54,9 @@ functional_data_series::functional_data_series(function_type_t func_type, uint64
     }
 }
 
-nlohmann::json functional_data_series::to_json(data_encoding::encoding_type_t type) const {
-    auto j = data_series::to_json(type);
-    j[JSON_FUNC_DATAS_TYPE] = function_type();
-    j[JSON_FUNC_DATAS_SOURCE] = source_id();
-    return j;
+data_series::data_type_t functional_data_series::type() const
+{
+    return data_series::function_data;
 }
 
 double functional_data_series::operator()(double x) const
@@ -67,6 +65,13 @@ double functional_data_series::operator()(double x) const
         return m_function((*m_source)(x));
     else
         return m_function(x);
+}
+
+nlohmann::json functional_data_series::to_json(data_encoding::encoding_type_t type) const {
+    auto j = data_series::to_json(type);
+    j[JSON_FUNC_DATAS_TYPE] = function_type();
+    j[JSON_FUNC_DATAS_SOURCE] = source_id();
+    return j;
 }
 
 bool functional_data_series::operator==(const functional_data_series& rhs) const

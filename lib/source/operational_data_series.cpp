@@ -5,7 +5,7 @@ namespace ds {
 
 
 operational_data_series::operational_data_series(operation_type_t op_type, uint64_t id, std::vector<std::shared_ptr<data_series>> sources)
-    : data_series(id, sources[0]->properties(), data_type_t::operational_data)
+    : data_series(id, sources[0]->properties())
     , m_type(op_type)
     , m_sources(sources)
 {
@@ -82,6 +82,17 @@ operational_data_series::operational_data_series(operation_type_t op_type, uint6
     }    
 }
 
+data_series::data_type_t operational_data_series::type() const
+{
+    return data_series::operational_data;
+}
+
+double operational_data_series::operator()(double x) const
+{
+    return m_function(x);
+}
+
+
 nlohmann::json operational_data_series::to_json(data_encoding::encoding_type_t type) const  {
     auto j = data_series::to_json(type);
     j[JSON_OP_DATAS_TYPE] = operation_type();
@@ -95,11 +106,6 @@ nlohmann::json operational_data_series::to_json(data_encoding::encoding_type_t t
 bool operational_data_series::operator==(const operational_data_series& rhs) const
 {
     return data_series::operator==(rhs) && m_type == rhs.m_type && std::equal(m_sources.begin(), m_sources.end(), rhs.m_sources.begin());
-}
-
-double operational_data_series::operator()(double x) const
-{
-    return m_function(x);
 }
 
 }

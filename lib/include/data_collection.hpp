@@ -6,6 +6,7 @@
 #include "data_series_properties.hpp"
 #include "functional_data_series.hpp"
 #include "operational_data_series.hpp"
+#include <mutable_data_series.hpp>
 
 #include <atomic>
 #include <memory>
@@ -31,10 +32,14 @@ namespace ds {
         std::shared_ptr<data_series> create_static_series(std::initializer_list<double> list, double frequency, double start = 0.0);
         std::shared_ptr<data_series> create_static_series(const std::vector<double>& vector, double frequency, double start = 0.0);
 
-        std::shared_ptr<data_series> create_polynom(const data_series_properties& props, const std::vector<double>& polynom);
+        std::shared_ptr<mutable_data_series> create_mutable_data_series(double frequency, double start = 0.0);
 
         std::shared_ptr<data_series> create_functional_data_series(functional_data_series::function_type_t type, const data_series_properties& props, std::shared_ptr<data_series> source = nullptr);
         std::shared_ptr<data_series> create_operational_data_series(operational_data_series::operation_type_t type, std::vector<std::shared_ptr<data_series>> sources);
+
+        
+
+        std::shared_ptr<data_series> create_polynom(const data_series_properties& props, const std::vector<double>& polynom);
 
         nlohmann::json to_json(data_encoding::encoding_type_t type) const;
         void to_json_file(const std::string& file, data_encoding::encoding_type_t type) const;
