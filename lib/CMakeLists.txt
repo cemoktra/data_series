@@ -15,6 +15,7 @@ set(HEADERS
     ${DATASERIERS_INCLUDE_DIR}/operational_data_series.hpp
     ${DATASERIERS_INCLUDE_DIR}/data_series_regression.hpp
     ${DATASERIERS_INCLUDE_DIR}/mutable_data_series.hpp
+    ${DATASERIERS_INCLUDE_DIR}/resampled_data_series.hpp
 )
 
 set(SOURCES
@@ -26,6 +27,7 @@ set(SOURCES
     ${DATASERIERS_SOURCE_DIR}/operational_data_series.cpp
     ${DATASERIERS_SOURCE_DIR}/data_series_regression.cpp
     ${DATASERIERS_SOURCE_DIR}/mutable_data_series.cpp
+    ${DATASERIERS_SOURCE_DIR}/resampled_data_series.cpp
 )
 
 include_directories(${DATASERIERS_INCLUDE_DIR})

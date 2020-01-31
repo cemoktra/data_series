@@ -19,8 +19,9 @@ namespace ds {
         static_data_series(const static_data_series&) = delete;
         ~static_data_series() = default;
 
+        virtual size_t hash() const override;
         virtual data_series::data_type_t type() const override;
-        double operator()(double x) const override;
+        double operator()(double x) override;
         virtual nlohmann::json to_json(data_encoding::encoding_type_t type) const;
 
         bool operator==(const static_data_series& rhs) const;
@@ -31,7 +32,11 @@ namespace ds {
         static_data_series(uint64_t id, std::initializer_list<double> list, double frequency, double start = 0.0);
         static_data_series(uint64_t id, const std::vector<double>& vector, double frequency, double start = 0.0);
         static_data_series(uint64_t id, nlohmann::json json);
+
+        void calculate_hash();
+
         std::vector<double> m_data;
+        size_t m_hash;
     };
 }
 

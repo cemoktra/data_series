@@ -17,6 +17,7 @@ namespace ds {
             function_data,
             operational_data,
             mutable_data,
+            resampled_data,
         };
 
         ~data_series() = default;
@@ -29,9 +30,9 @@ namespace ds {
         inline double max() const       { return m_properties.sampleToTime(m_properties.samples() - 1); }
         inline double step() const      { return 1.0 / m_properties.frequency(); }
 
-
+        virtual size_t hash() const = 0;
         virtual data_type_t type() const = 0;
-        virtual double operator()(double x) const = 0;
+        virtual double operator()(double x) = 0;
         virtual nlohmann::json to_json(data_encoding::encoding_type_t type) const {
             return nlohmann::json{{JSON_DATAS_ID, id()}, {JSON_DATAS_TYPE, this->type()}, {JSON_DATAS_PROPERTIES, properties().to_json()}};
         }

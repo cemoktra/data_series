@@ -82,12 +82,20 @@ operational_data_series::operational_data_series(operation_type_t op_type, uint6
     }    
 }
 
+size_t operational_data_series::hash() const
+{
+    size_t hash_value = 0;
+    for (auto source : m_sources)
+        hash_value = hash_value ^ (source->hash() << 1);
+    return hash_value;
+}
+
 data_series::data_type_t operational_data_series::type() const
 {
     return data_series::operational_data;
 }
 
-double operational_data_series::operator()(double x) const
+double operational_data_series::operator()(double x)
 {
     return m_function(x);
 }

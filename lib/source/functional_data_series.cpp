@@ -54,12 +54,17 @@ functional_data_series::functional_data_series(function_type_t func_type, uint64
     }
 }
 
+size_t functional_data_series::hash() const
+{
+    return m_source->hash();
+}
+
 data_series::data_type_t functional_data_series::type() const
 {
     return data_series::function_data;
 }
 
-double functional_data_series::operator()(double x) const
+double functional_data_series::operator()(double x)
 {
     if (m_source)
         return m_function((*m_source)(x));

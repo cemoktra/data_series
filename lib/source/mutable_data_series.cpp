@@ -15,12 +15,15 @@ mutable_data_series::mutable_data_series(uint64_t id, nlohmann::json json)
 void mutable_data_series::push_back(double value)
 {
     m_data.push_back(value);
+    m_hash = m_hash ^ (std::hash<double>()(value) << 1);
     m_properties.add_samples(1);
 }
 
 void mutable_data_series::push_back(std::vector<double> values)
 {
     m_data.insert(m_data.end(), values.begin(), values.end());
+    for (auto value : values)
+        m_hash = m_hash ^ (std::hash<double>()(value) << 1);
     m_properties.add_samples(values.size());
 }
 

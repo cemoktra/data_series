@@ -9,6 +9,8 @@ namespace ds
 {
 
 class operational_data_series : public data_series {
+    friend class data_collection;
+    
 public:
     enum operation_type_t {
         add_operation,
@@ -20,20 +22,23 @@ public:
         pow_operation,
     };
 
-    operational_data_series(operation_type_t func_type, uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
+    operational_data_series() = delete;
     operational_data_series(const operational_data_series&) = delete;
     ~operational_data_series() = default;
 
     inline operation_type_t operation_type() const { return m_type; }
     inline std::vector<uint64_t> source_ids() const { std::vector<uint64_t> ids; for (auto source : m_sources) ids.push_back(source->id()); return ids; }
 
+    size_t hash() const override;
     data_series::data_type_t type() const override;
-    double operator()(double x) const override;    
+    double operator()(double x) override;    
     nlohmann::json to_json(data_encoding::encoding_type_t type) const override;
 
     bool operator==(const operational_data_series& rhs) const;
 
 private:
+    operational_data_series(operation_type_t func_type, uint64_t id, std::vector<std::shared_ptr<data_series>> sources);
+
     std::vector<std::shared_ptr<data_series>> m_sources;
     std::function<double(double)> m_function;
     operation_type_t m_type;    
