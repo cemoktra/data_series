@@ -26,13 +26,11 @@ public:
         , m_start(start)
     {}
 
-    explicit data_series_properties(double frequency, double start, double end, bool end_exclusive = true)
+    explicit data_series_properties(double frequency, double start, double end)
         : m_frequency(frequency)
         , m_start(start)
     {
-        m_samples = static_cast<uint64_t>((end - start) * frequency);
-        if (!end_exclusive)
-            m_samples++;
+        m_samples = static_cast<uint64_t>((end - start) * frequency) + 1;
     }
 
     data_series_properties() = delete;
@@ -44,6 +42,27 @@ public:
     }
 
     ~data_series_properties() = default;
+
+    data_series_properties resample(uint64_t target_samples) const
+    {
+        auto freq = (target_samples - 1) / (end() - start());
+        return data_series_properties(target_samples, freq, m_start);
+    }
+
+    data_series_properties resample(double target_frequency) const
+    {
+        return data_series_properties(target_frequency, start(), end());
+    }
+
+    static data_series_properties resample(const data_series_properties& props, uint64_t target_samples)
+    {
+        return props.resample(target_samples);
+    }
+
+    static data_series_properties resample(const data_series_properties& props, double target_frequency)
+    {
+        return props.resample(target_frequency);
+    }
 
     bool operator==(const data_series_properties& rhs) const {
         return m_samples == rhs.m_samples && m_frequency == rhs.m_frequency  && m_start == rhs.m_start;

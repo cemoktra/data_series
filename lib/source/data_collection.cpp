@@ -1,6 +1,7 @@
 #include "data_collection.hpp"
 #include "static_data_series.hpp"
 #include "mutable_data_series.hpp"
+#include "resampled_data_series.hpp"
 #include <iomanip>
 #include <fstream>
 
@@ -45,6 +46,9 @@ std::shared_ptr<data_collection> data_collection::from_json(nlohmann::json json)
             case data_series::operational_data:
                 collection->operational_data_from_json(json_data);
                 break;
+            case data_series::resampled_data:
+                collection->resampled_data_from_json(json_data);
+                break;
             default:
                 throw std::exception();
         }
@@ -78,6 +82,15 @@ void data_collection::operational_data_from_json(nlohmann::json json)
     create_operational_data_series(op_type, sources);
 }
 
+void data_collection::resampled_data_from_json(nlohmann::json json)
+{
+    auto source = data_series_by_id(json[JSON_RESAMPLING_SOURCE]);
+    if (json.contains(JSON_RESAMPLING_SAMPLES))
+        create_resampled_series(uint64_t(json[JSON_RESAMPLING_SAMPLES]), source);
+    else
+        create_resampled_series(double(json[JSON_RESAMPLING_FREQUENCY]), source);
+}
+
 std::shared_ptr<data_series> data_collection::create_static_series(const data_series_properties& props, double initial_value)
 {
     return add_raw_pointer(new static_data_series(m_next_id++, props, initial_value));
@@ -101,6 +114,16 @@ std::shared_ptr<data_series> data_collection::create_static_series(const std::ve
 std::shared_ptr<mutable_data_series> data_collection::create_mutable_data_series(double frequency, double start)
 {
     return std::dynamic_pointer_cast<mutable_data_series>(add_raw_pointer(new mutable_data_series(m_next_id++, frequency, start)));
+}
+
+std::shared_ptr<data_series> data_collection::create_resampled_series(uint64_t target_samples, std::shared_ptr<data_series> source)
+{
+    return add_raw_pointer(new resampled_data_series(m_next_id++, target_samples, source));
+}
+
+std::shared_ptr<data_series> data_collection::create_resampled_series(double target_frequency, std::shared_ptr<data_series> source)
+{
+    return add_raw_pointer(new resampled_data_series(m_next_id++, target_frequency, source));
 }
 
 std::shared_ptr<data_series> data_collection::create_polynom(const data_series_properties& props, const std::vector<double>& polynom)

@@ -73,7 +73,7 @@ TEST_F(static_data_series_test, constructor_vector)
 
 TEST_F(static_data_series_test, constructor_parameters)
 {
-    derived_static_data_series series (ds::data_series_properties(2.0, -1.0, 1.0, false), 2.5);
+    derived_static_data_series series (ds::data_series_properties(2.0, -1.0, 1.0), 2.5);
     
     EXPECT_EQ(0, series.id());
     EXPECT_EQ(ds::data_series::static_data, series.type());

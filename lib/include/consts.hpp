@@ -20,7 +20,10 @@ namespace ds {
     static const std::string JSON_FUNC_DATAS_SOURCE = "source";
     static const std::string JSON_OP_DATAS_TYPE = "op_type";
     static const std::string JSON_OP_DATAS_SOURCES = "sources";
-    
+    static const std::string JSON_RESAMPLING_FREQUENCY = "target_frequency";
+    static const std::string JSON_RESAMPLING_SAMPLES = "target_sampples";
+    static const std::string JSON_RESAMPLING_SOURCE = "source";
+
 }
 
 #endif
