@@ -67,8 +67,8 @@ TEST_F(resampled_data_series_test, downsample_async_recalculate_only_once)
     std::shared_ptr<ds::data_series> source (new derived_static_data_series({0.0, 0.5, 1.0, 1.5, 2.0, 1.5, 1.0, 0.5, 0.0, -0.5, -1.0, -1.5, -2.0, -1.5, -1.0, -0.5, -0.0}, 16));
     derived_resampled_data_series resampled(uint64_t(5), source);
     auto recalc1 = resampled.recalculate_async();
-    auto recalc2 = resampled.recalculate_async();
     EXPECT_TRUE(recalc1.get());
+    auto recalc2 = resampled.recalculate_async();
     EXPECT_FALSE(recalc2.get());
     EXPECT_EQ(0.0, resampled(0.0));
     EXPECT_EQ(0.0, resampled(1.0));
